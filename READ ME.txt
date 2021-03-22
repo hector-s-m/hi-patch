@@ -1,4 +1,4 @@
-HI-PATCH (v.1.0)
+# HI-PATCH (v.1.0)
 
 Authors: Hector Sanchez-Moran, James S. Weltz, Daniel K. Schwartz, Joel L. Kaar.
 Department of Chemical & Biological Engineering.
