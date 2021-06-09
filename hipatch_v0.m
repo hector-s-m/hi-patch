@@ -80,7 +80,7 @@ rVdW(20,10:14)=1.76;
 %% Free energy array in kcal/mol
 
 % Obtained in:
-% Stouten, P. F. W., Frömmel, C., Nakamura, H., & Sander, C. (1993). An 
+% Stouten, P. F. W., FrÃ¶mmel, C., Nakamura, H., & Sander, C. (1993). An 
 % Effective Solvation Term Based on Atomic Occupancies for Use in Protein 
 % Simulations. Molecular Simulation, 10(2-6), 97?120. doi:10.1080/08927029308022161 
 
@@ -549,8 +549,8 @@ for i = 1:length(Surfnum(:,1))
             
             stdev_factor=0.25; % Correction factor for interaction lengthscale adaptation to Gaussian standard deviation
             
-            % Defining interaction lengthscale as 6 Å for charged atoms,
-            % and 3.5 Å for uncharged atoms, according to Lazaridis et al.
+            % Defining interaction lengthscale as 6 Ã… for charged atoms,
+            % and 3.5 Ã… for uncharged atoms, according to Lazaridis et al.
             % (1999).
             if strcmp(Surftxt(i,2),'ARG') && ((strcmp(Surftxt(i,1),'NH1')) || strcmp(Surftxt(i,1),'NH2'))
                Surfnum(j,7)=(Surfnum(i,9)*Surfnum(i,11)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+Surfnum(j,7);
@@ -574,9 +574,9 @@ scatter3(Surfnum(:,3),Surfnum(:,4),Surfnum(:,5),10,[0 0 1],'filled')
     axis equal
     view (45,35)
     grid on
-    xlabel('x coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-    ylabel('y coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-    zlabel('z coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
+    xlabel('x coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+    ylabel('y coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+    zlabel('z coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
     set(gcf, 'Position', get(0, 'Screensize'));
        
     % Calculate geometrical centroid
@@ -640,9 +640,9 @@ end
     axis equal
     view (45,35)
     grid on
-    xlabel('x coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-    ylabel('y coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-    zlabel('z coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
+    xlabel('x coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+    ylabel('y coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+    zlabel('z coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
     set(gcf, 'Position', get(0, 'Screensize'));
 hold off
 
@@ -684,7 +684,7 @@ hold on
 scatter(Res(:,4),Res(:,3),40,[Res(:,6) 1-Res(:,6) 1-Res(:,6)],'filled')
     grid on
     axis square
-    xlabel('Patch size (Å^2)','fontsize',16,'fontweight','bold','FontName','Arial')
+    xlabel('Patch size (Ã…^2)','fontsize',16,'fontweight','bold','FontName','Arial')
     xlim([0 ceil(max(Res(:,4)))])
     ylabel('Cumulative patch solvation free energy (kJ/mol)','fontsize',16,'fontweight','bold','FontName','Arial')
     ylim([0 ceil(max(Res(:,3)))])
@@ -705,7 +705,7 @@ scatter(Res(:,4),Res(:,2),40,[Res(:,6) 1-Res(:,6) 1-Res(:,6)],'filled')
     grid on
     box on
     axis square
-    xlabel('Patch size (Å^2)','fontsize',16,'fontweight','bold','FontName','Arial')
+    xlabel('Patch size (Ã…^2)','fontsize',16,'fontweight','bold','FontName','Arial')
     xlim([0 ceil(max(Res(:,4)))])
     ylabel('Max patch solvation free energy (kJ/mol)','fontsize',16,'fontweight','bold','FontName','Arial')
     ylim([0 ceil(max(Res(:,2)))])
@@ -747,7 +747,7 @@ Percentage_aromatic_surface=arom_surf/Total_surface_area;
 fprintf('\nhide\nset surface_quality, 1\nshow surface\ncolor forest\nbg_color white\n\n')
 for i=1:max(SurfPatchnum(:,5))
     fprintf('#Patch %i\n',i)
-    fprintf('#Area: %f Å^2\n',Res(i,4))
+    fprintf('#Area: %f Ã…^2\n',Res(i,4))
     fprintf('color tv_red, (index ')
     for j=1:length(SurfPatchnum(:,5))
         if i == SurfPatchnum(j,5)
@@ -764,7 +764,7 @@ writematrix('Enzyme name','Enzymes.xlsx','Sheet','Results','Range','A1')
 writematrix('Enzyme ID','Enzymes.xlsx','Sheet','Results','Range','B1')
 writematrix('# hydrophobic patches','Enzymes.xlsx','Sheet','Results','Range','C1')
 writematrix('% relative hydrophobic surface','Enzymes.xlsx','Sheet','Results','Range','D1')
-writematrix('DGsolv/area (kJ/mol·nm^2)','Enzymes.xlsx','Sheet','Results','Range','E1')
+writematrix('DGsolv/area (kJ/molÂ·nm^2)','Enzymes.xlsx','Sheet','Results','Range','E1')
 writematrix('% aromatic surface','Enzymes.xlsx','Sheet','Results','Range','F1')
 rep=readcell('Enzymes.xlsx','Sheet','Results','Range','B2:B1000');
 maxrng=length(rep);
