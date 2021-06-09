@@ -17,7 +17,7 @@ close all
 clear all
 clc 
 
-Excel_booklet='Proteins.xlsx'; % Select Excel booklet where protein information is located.
+Excel_booklet='Enzymes.xlsx'; % Select Excel booklet where protein information is located.
 tab='tab'; % Select tab name
 excel_import = readtable(Excel_booklet,'ReadVariableNames',false,'Sheet',tab); % Separate numbers and text into two different arrays
 
