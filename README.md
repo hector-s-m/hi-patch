@@ -33,4 +33,4 @@ Excel file formatting:
 
 Notes: 
 - Crystal structures in the Protein Data Bank are pretty diverse, and outliars help polish the code. Contact to fix glitches is greatly appreciated.
-- Lines #762-789 for reporting results in Excel just available in MacOS.
+- Lines for reporting results in Excel just available in MacOS.
