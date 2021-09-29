@@ -10,6 +10,8 @@ Contact: hector.sanchez-moran@colorado.edu
 
 Determination of hydrophobic patches (HPs) of known crystal structures 
 based on solvation free energies of solvent exposed atoms.
+
+Latest update: 09-28-2021
  
 Cite: Sánchez-Morán et al. ACS Appl. Mater. Interfaces. 2021, 13, 23, 26694-26703.
 
