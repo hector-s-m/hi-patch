@@ -35,7 +35,7 @@ Notes:
 - Crystal structures in the Protein Data Bank are pretty diverse, and outliars help polish the code. Contact to fix glitches is greatly appreciated.
 - Lines for reporting results in Excel just available in MacOS.
 
-Version v1.
+Version v1:
 - Corrected the code in order to analyze multimeric structures. v0 could just analyze single polypeptides.
 - Ability to select which outputs to generate.
 - Computation time down to ~1/8 of original code. 
