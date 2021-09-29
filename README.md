@@ -1,5 +1,5 @@
 # hi-patch
-Hydrophobic Intensity Patch tool for the study of protein surface hydrophobicity
+Hydrophobic Intensity Patch (hi-patch) tool for the study of protein surface hydrophobicity
 
 Authors: Hector Sanchez-Moran, James S. Weltz, Daniel K. Schwartz, Joel L. Kaar.
 Department of Chemical & Biological Engineering.
