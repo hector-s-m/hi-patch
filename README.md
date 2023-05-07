@@ -11,12 +11,11 @@ Contact: hector.sanchez-moran@colorado.edu
 Determination of hydrophobic patches (HPs) of known crystal structures 
 based on solvation free energies of solvent exposed atoms.
 
-Latest update: hi-patch_v1 (09-28-2021). See version notes below.
+Latest update: hi-patch_v2 (05-07-2023). See version notes below.
  
 Cite: Sánchez-Morán et al. ACS Appl. Mater. Interfaces. 2021, 13, 23, 26694-26703.
 
-For crystal structure pre-treatment tutorial, please visit: 
-https://www.youtube.com/watch?v=lqa4_L6qwIw&feature=youtu.be
+For crystal structure pre-treatment tutorial, read Instructions_hipatch.pdf.
 
 Please, place in the same folder:
 - hi-patch script.
@@ -36,9 +35,12 @@ Excel file formatting:
 Notes: 
 - Crystal structures in the Protein Data Bank are pretty diverse, and outliars help polish the code. Contact to fix glitches is greatly appreciated.
 - Lines for reporting results in Excel just available in MacOS.
+- It is absolutely necessary for correct results that all input proteins have all side chains resolved and have no isomers. If there are unresolved regions it is not a problem, as long as unresolved residues are fully unresolved. For partially resolved residues, it is recommended to run pdbfixer (https://sbgrid.org/software/titles/pdbfixer) or some other tool. Computationally generated structures (e.g., AlphaFold2) rarely have these issues.
 
-Version v1:
-- Corrected the code in order to analyze multimeric structures. v0 could just analyze single polypeptides.
-- Ability to select which outputs to generate.
-- Computation time down to ~1/8 of original code. 
-- Incorporated 2D polar plots and patch count histogram.
+Version v2:
+Major hi-patch update comprising numerous upgrades.
+- More efficient code (computation time ~1/3 less than previous release).
+- Fixed numerous glitches related to multimeric structures.
+- Incorporated mapping of hydrophobic patches using a color gradient to differentiate hydrophobicity of each patch based on a hydrophobicity index.
+- Incorporated hydrophobicity directionality vector, which points towards the region of the protein where there are more hydrophobic patches.
+- Made a small change in areas.py file to accelerate areas calculation at the cost of minimally reducing precision. This can be changed by setting 'dot_density' to 4. Not recommended to set dot_density to lower than 3.
