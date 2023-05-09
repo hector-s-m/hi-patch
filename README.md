@@ -8,6 +8,8 @@ Contact: hector.sanchez-moran@colorado.edu
 
 -------------------------------------------------------------------------------
 
+![Hi-patch workflow](https://github.com/hector-s-m/hi-patch/assets/67207265/65894e44-b61c-4939-bad9-d4fd47f0914e)
+
 Determination of hydrophobic patches (HPs) of known crystal structures 
 based on solvation free energies of solvent exposed atoms.
 
