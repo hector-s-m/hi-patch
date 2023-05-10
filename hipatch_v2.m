@@ -265,204 +265,55 @@ Running a PDB file cleaner to remove heterogen atoms is recommended.
 %}
 
 % Store rVdW, dGsolv and aromaticity in data array.
-cnt=1;
-while cnt<length(data.at_index(:,1))
-    if strcmp(data.at_name(cnt),'OXT')==1 % C terminus, could be problematic for multimeric structures
-            data.rVdW(cnt,1)=1.4;
-            data.dG(cnt,1)=-10*4.184;
-            data.arom(cnt)=0;
-            cnt=cnt+1;
-    elseif strcmp(data.res_name(cnt),'GLY')==1
-            j=1;
-            k=4;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ALA')==1
-            j=2;
-            k=5;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'CYS')==1
-            j=3;
-            k=6;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'SER')==1
-            j=4;
-            k=6;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'THR')==1
-            j=5;
-            k=7;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'PRO')==1
-            j=6;
-            k=7;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'VAL')==1
-            j=7;
-            k=7;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ILE')==1
-            j=8;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'LEU')==1
-            j=9;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'MET')==1
-            j=10;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ASN')==1
-            j=11;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ASP')==1
-            j=12;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ASH')==1
-            j=12;
-            k=8;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.dG(cnt+(k-2))=-5.07*4.184; % Uncharged carbonyl of carboxylic acid
-            data.dG(cnt+(k-1))=-5.92*4.184; % Uncharged hydroxyl of carboxylic acid
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'GLU')==1
-            j=13;
-            k=9;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'GLH')==1
-            j=13;
-            k=9;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.dG(cnt+(k-2))=-5.07*4.184; % Uncharged carbonyl of carboxylic acid
-            data.dG(cnt+(k-1))=-5.92*4.184; % Uncharged hydroxyl of carboxylic acid
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'GLN')==1
-            j=14;
-            k=9;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'LYS')==1
-            j=15;
-            k=9;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'LYN')==1
-            j=15;
-            k=9;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.rVdW(cnt+(k-1))=1.65; % Uncharged NH2
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.dG(cnt+(k-1))=-7.02*4.184; % Uncharged NH2
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        %elseif strcmp(data.res_name(cnt),'HIS')==1
-        elseif strcmp(data.res_name(cnt),'HIS')==1 || ...
-               strcmp(data.res_name(cnt),'HIE')==1 || ...
-               strcmp(data.res_name(cnt),'HID')==1
-            j=16;
-            k=10;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'HIP')==1 
-            j=16;
-            k=10;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.dG(cnt+(k-1))=-20*4.184; % Charged epsilon NH
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ARG')==1
-            j=17;
-            k=11;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'ARN')==1
-            j=17;
-            k=11;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.dG(cnt+(k-2))=-0.77*4.184; % Uncharged NH
-            data.dG(cnt+(k-1))=-7.02*4.184; % Uncharged NH2
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'PHE')==1
-            j=18;
-            k=11;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'TYR')==1
-            j=19;
-            k=12;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        elseif strcmp(data.res_name(cnt),'TRP')==1
-            j=20;
-            k=14;
-            data.rVdW(cnt:cnt+(k-1))=rVdW(j,1:k)';
-            data.dG(cnt:cnt+(k-1))=dG(j,1:k)';
-            data.arom(cnt:cnt+(k-1))=arom_aliph(j,1:k)';
-            cnt=cnt+k;
-        else
-            cnt=cnt+1;
+
+    lookup_table = {
+    'GLY', 1, 4; 'ALA', 2, 5; 'CYS', 3, 6; 'SER', 4, 6;
+    'THR', 5, 7; 'PRO', 6, 7; 'VAL', 7, 7; 'ILE', 8, 8;
+    'LEU', 9, 8; 'MET', 10, 8; 'ASN', 11, 8; 'ASP', 12, 8;
+    'ASH', 12, 8; 'GLU', 13, 9; 'GLH', 13, 9; 'GLN', 14, 9;
+    'LYS', 15, 9; 'LYN', 15, 9; 'HIS', 16, 10; 'HIE', 16, 10;
+    'HID', 16, 10; 'HIP', 16, 10; 'ARG', 17, 11; 'ARN', 17, 11;
+    'PHE', 18, 11; 'TYR', 19, 12; 'TRP', 20, 14;
+};
+
+cnt = 1;
+
+while cnt < length(data.at_index(:,1))
+    res_name = data.res_name(cnt);
+    row = strcmp(lookup_table(:,1), res_name);
+    row = find(row);
+    
+    if isempty(row)
+        cnt = cnt + 1;
+        continue;
     end
+
+    j = lookup_table{row, 2};
+    k = lookup_table{row, 3};
+
+    data.rVdW(cnt:cnt+(k-1)) = rVdW(j, 1:k)';
+    data.dG(cnt:cnt+(k-1)) = dG(j, 1:k)';
+    data.arom(cnt:cnt+(k-1)) = arom_aliph(j, 1:k)';
+
+    if strcmp(res_name, 'OXT')
+        data.rVdW(cnt,1) = 1.4;
+        data.dG(cnt,1) = -10 * 4.184;
+    elseif strcmp(res_name, 'ASH') || strcmp(res_name, 'GLH')
+        data.dG(cnt+(k-2)) = -5.07 * 4.184;
+        data.dG(cnt+(k-1)) = -5.92 * 4.184;
+    elseif strcmp(res_name, 'LYN')
+        data.rVdW(cnt+(k-1)) = 1.65;
+        data.dG(cnt+(k-1)) = -7.02 * 4.184;
+    elseif strcmp(res_name, 'HIP')
+        data.dG(cnt+(k-1)) = -20 * 4.184;
+    elseif strcmp(res_name, 'ARN')
+        data.dG(cnt+(k-2)) = -0.77 * 4.184;
+        data.dG(cnt+(k-1)) = -7.02 * 4.184;
+    end
+
+    cnt = cnt + k;
 end
+
 %% Surface calculations 
 data.sphere_surf(:,1)=4*pi*(1.4+data.rVdW(:)).^2; % Surface of sphere of radius rVdW + water (Solvent Accessible Surface Area, SASA)
 data.frac_SASA(:,1)=data.surf_exp(:)./data.sphere_surf(:); % Fraction surface exposure with respect to ideal isolated spherical atom
