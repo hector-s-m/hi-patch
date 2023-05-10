@@ -10,10 +10,10 @@ structures based on solvation free energies of solvent exposed atoms.
 Cite: ACS Appl. Mater. Interfaces 2021, 13, 23, 26694-26703
 
 Notes:
-    · Crystal structures in the Protein Data Bank are pretty diverse,
+    Â· Crystal structures in the Protein Data Bank are pretty diverse,
       and outliars help polish the code. Contact to fix glitches is
       greatly appreciated (hector.sanchez-moran@colorado.edu)
-    · Reporting results in Excel just available in MacOS.
+    Â· Reporting results in Excel just available in MacOS.
 
 Latest update: 04/15/2023
 
@@ -148,7 +148,7 @@ rVdW(20,10:14)=1.76;
 Free energies array
 
 Obtained in:
-Stouten, P. F. W., Frömmel, C., Nakamura, H., & Sander, C. (1993). An 
+Stouten, P. F. W., FrÃ¶mmel, C., Nakamura, H., & Sander, C. (1993). An 
 Effective Solvation Term Based on Atomic Occupancies for Use in Protein 
 Simulations. Molecular Simulation, 10(2-6), 97-120. doi:10.1080/08927029308022161 
 
@@ -503,33 +503,45 @@ end
 surfdata.cum_dG=zeros(length(surfdata.at_name(:,1)),1);
 d_matrix=zeros(length(surfdata.at_name(:,1)),1);
 
-% Loop for finding interatomic distances (d_matrix) and compute gaussian
-% projection based on dGsolv of each atom, with an interaction lengthscale
-% of defined in Lazaridis et al. (1999). 6 Å for charged atoms,
-% and 3.5 Å for uncharged atoms 
+% Gaussian projection based on dGsolv of each atom, with an interaction 
+% lengthscale defined in Lazaridis et al. (1999). 6 Ã… for charged atoms,
+% and 3.5 Ã… for uncharged atoms 
 
-for i = 1:length(surfdata.at_name(:,1))
-    for j = i:length(surfdata.at_name(:,1))
-            % Compute interatomic Euclidean distances
-            d_j = distance(surfdata.coords(i,1),surfdata.coords(i,2),surfdata.coords(i,3),surfdata.coords(j,1),surfdata.coords(j,2),surfdata.coords(j,3)); 
-            d_matrix(i,j)=d_j; % Copy distance value in distance array
-            d_matrix(j,i)=d_matrix(i,j); % Symmetric array           
-            stdev_factor=0.25; % Correction factor for interaction lengthscale adaptation to Gaussian standard deviation
+n_atoms = length(surfdata.at_name(:, 1));
+d_matrix = zeros(n_atoms);
 
-            if strcmp(surfdata.res_name(i),'ARG') && ((strcmp(surfdata.at_name(i),'NH1')) || strcmp(surfdata.at_name(i),'NH2'))
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+surfdata.cum_dG(j,1);
-            elseif strcmp(surfdata.res_name(i),'ASP') && ((strcmp(surfdata.at_name(i),'OD1')) || strcmp(surfdata.at_name(i),'OD2'))
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+surfdata.cum_dG(j,1);
-            elseif strcmp(surfdata.res_name(i),'GLU') && ((strcmp(surfdata.at_name(i),'OE1')) || strcmp(surfdata.at_name(i),'OE2'))
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+surfdata.cum_dG(j,1);
-            elseif strcmp(surfdata.res_name(i),'LYS') && strcmp(surfdata.at_name(i),'NZ')
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+surfdata.cum_dG(j,1);
-            elseif strcmp(surfdata.res_name(i),'HIP') && strcmp(surfdata.at_name(i),'NE2')
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*6)/normpdf(0,0,stdev_factor*6))+surfdata.cum_dG(j,1);
-            else
-               surfdata.cum_dG(j,1)=(surfdata.dG(i)*surfdata.frac_SASA(i)*normpdf(d_j,0,stdev_factor*3.5)/normpdf(0,0,stdev_factor*3.5))+surfdata.cum_dG(j,1);
-            end
+stdev_factor = 0.25;
+norm_6 = normpdf(0, 0, stdev_factor * 6);
+norm_3_5 = normpdf(0, 0, stdev_factor * 3.5);
+
+surfdata.cum_dG = zeros(n_atoms, 1);
+
+for i = 1:n_atoms
+    res_name_i = surfdata.res_name(i);
+    at_name_i = surfdata.at_name(i);
+    dG_factor = surfdata.dG(i) * surfdata.frac_SASA(i);
+    
+    is_ARG_NH = strcmp(res_name_i, 'ARG') && (strcmp(at_name_i, 'NH1') || strcmp(at_name_i, 'NH2'));
+    is_ASP_OD = strcmp(res_name_i, 'ASP') && (strcmp(at_name_i, 'OD1') || strcmp(at_name_i, 'OD2'));
+    is_GLU_OE = strcmp(res_name_i, 'GLU') && (strcmp(at_name_i, 'OE1') || strcmp(at_name_i, 'OE2'));
+    is_LYS_NZ = strcmp(res_name_i, 'LYS') && strcmp(at_name_i, 'NZ');
+    is_HIP_NE = strcmp(res_name_i, 'HIP') && strcmp(at_name_i, 'NE2');
+    
+
+    coords_i = surfdata.coords(i, :);
+    coords_j = surfdata.coords(i:end, :);
+    d_vec = pdist2(coords_i, coords_j);
+    
+    d_matrix(i, i:end) = d_vec;
+    d_matrix(i+1:end, i) = d_vec(2:end);
+    
+    if is_ARG_NH || is_ASP_OD || is_GLU_OE || is_LYS_NZ || is_HIP_NE
+        norm_ratio_vec = normpdf(d_vec, 0, stdev_factor * 6) / norm_6;
+    else
+        norm_ratio_vec = normpdf(d_vec, 0, stdev_factor * 3.5) / norm_3_5;
     end
+    
+    surfdata.cum_dG(i:end) = dG_factor * norm_ratio_vec' + surfdata.cum_dG(i:end);
 end
 
 % Calculate geometrical centroid
@@ -563,7 +575,7 @@ for i = 1:length(surfdata.at_name(:,1))
 end
 %% DBSCAN clustering and filtering
 % DBSCAN filter with clustering parameters:
-% - Clustering distance set as 3 times radius of water (3 x 1.4 Å).
+% - Clustering distance set as 3 times radius of water (3 x 1.4 Ã…).
 % - Minimum number of atoms to determine a hydrophobic patch: 4.
 %
 % dbscan function gives value of '-1' to atoms considered noise, and assigns
@@ -713,9 +725,9 @@ switch PlotString{ii}
             axis equal
             view (45,35)
             grid on
-            xlabel('x coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-            ylabel('y coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-            zlabel('z coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
+            xlabel('x coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+            ylabel('y coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+            zlabel('z coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
             set(gcf, 'Position', get(0, 'Screensize'));
         % Plot centroid    
         scatter3(data.centroid(1),data.centroid(2),data.centroid(3),'*','r')    
@@ -728,9 +740,9 @@ switch PlotString{ii}
             axis equal
             view (45,35)
             grid on
-            xlabel('x coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-            ylabel('y coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
-            zlabel('z coord (Å)','fontsize',22,'fontweight','bold','FontName','Arial')
+            xlabel('x coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+            ylabel('y coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
+            zlabel('z coord (Ã…)','fontsize',22,'fontweight','bold','FontName','Arial')
             set(gcf, 'Position', get(0, 'Screensize'));
         hold off
 
@@ -769,7 +781,7 @@ switch PlotString{ii}
             grid on
             box on
             axis square
-            xlabel('Patch size (Å^2)','fontsize',16,'fontweight','bold','FontName','Arial')
+            xlabel('Patch size (Ã…^2)','fontsize',16,'fontweight','bold','FontName','Arial')
             xlim([0 50*(ceil(max(results.area(:,1)))/50)])
             ylabel('Max patch solvation free energy (kJ/mol)','fontsize',16,'fontweight','bold','FontName','Arial')
             ylim([0 ceil(max(results.max_dGsolv(:,1)))])
@@ -792,7 +804,7 @@ switch PlotString{ii}
         scatter(results.area(:,1),results.cum_dGsolv(:,1),40,[results.aromaticity(:,1) 1-results.aromaticity(:,1) 1-results.aromaticity(:,1)],'filled')
             grid on
             axis square
-            xlabel('Patch size (Å^2)','fontsize',16,'fontweight','bold','FontName','Arial')
+            xlabel('Patch size (Ã…^2)','fontsize',16,'fontweight','bold','FontName','Arial')
             xlim([0 50*(ceil(max(results.area(:,1)))/50)])
             ylabel('Cumulative patch solvation free energy (kJ/mol)','fontsize',16,'fontweight','bold','FontName','Arial')        
             ylim([0 ceil(max(results.cum_dGsolv(:,1)))])
@@ -831,14 +843,14 @@ switch PlotString{ii}
         end
         ylim([0 50])
         axis square
-        xlabel('Patch size (Å^2)','fontsize',16,'fontweight','bold','FontName','Arial')
+        xlabel('Patch size (Ã…^2)','fontsize',16,'fontweight','bold','FontName','Arial')
         ylabel('Frequency','fontsize',16,'fontweight','bold','FontName','Arial')
 
     case 'Pymol_patch_export'
         fprintf('\nhide\nset surface_quality, 1\nshow surface\ncolor forest\nbg_color white\n\n')
         for i=1:results.n_patches
             fprintf('#Patch %i\n',i)
-            fprintf('#Area: %f Å^2\n',results.area(i))
+            fprintf('#Area: %f Ã…^2\n',results.area(i))
             fprintf('color tv_red, (index ')
             for j=1:length(patchdata.at_index)
                 if i == patchdata.patch_index(j)
@@ -896,7 +908,7 @@ switch PlotString{ii}
             writematrix('Enzyme ID','Enzymes.xlsx','Sheet','Results','Range','B1')
             writematrix('# hydrophobic patches','Enzymes.xlsx','Sheet','Results','Range','C1')
             writematrix('% relative hydrophobic surface','Enzymes.xlsx','Sheet','Results','Range','D1')
-            writematrix('DGsolv/area (kJ/mol·nm^2)','Enzymes.xlsx','Sheet','Results','Range','E1')
+            writematrix('DGsolv/area (kJ/molÂ·nm^2)','Enzymes.xlsx','Sheet','Results','Range','E1')
             writematrix('% aromatic surface','Enzymes.xlsx','Sheet','Results','Range','F1')
             rep=readcell('Enzymes.xlsx','Sheet','Results','Range','B2:B1000');
             maxrng=length(rep);
@@ -923,7 +935,7 @@ switch PlotString{ii}
         results.dGsolv_per_area(2:length(surfdata.at_index),1) = NaN(length(surfdata.at_index)-1,1)
         Results_output=table(surfdata.at_index,surfdata.at_name,surfdata.res_name,surfdata.res_index,surfdata.coords,...
             surfdata.frac_SASA,surfdata.cum_dG,surfdata.HI,surfdata.patch,surfdata.hydrophobicity_vector,data.centroid,results.dGsolv_per_area,...
-            'VariableNames',["Atom_index","Atom_name","Residue_name","Residue_index","Coords","Fractional_SASA","Cumulative_dG(kJ/mol)","Hydrophobicity_index","Patch_index","Hydrophobicity_vector","Centroid_coords","dGsolv/area(kJ/mol·nm^2)"]);
+            'VariableNames',["Atom_index","Atom_name","Residue_name","Residue_index","Coords","Fractional_SASA","Cumulative_dG(kJ/mol)","Hydrophobicity_index","Patch_index","Hydrophobicity_vector","Centroid_coords","dGsolv/area(kJ/molÂ·nm^2)"]);
         
         writetable(Results_output,'Results_output.txt','Delimiter','tab')
 
